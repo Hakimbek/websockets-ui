@@ -13,31 +13,26 @@ wss.on('connection', (ws) => {
     ws.on('message', (message) => {
         const { type, data } = JSON.parse(message);
 
-        if (type === "reg") {
-            register(ws, data);
-            updateRoom(wss);
-            updateWinners(wss);
-            return;
-        }
-
-        if (type === "create_room") {
-            createRoom(ws);
-            updateRoom(wss);
-            return;
-        }
-
-        if (type === "add_user_to_room") {
-            addUserToRoom(wss, ws, data);
-            return;
-        }
-
-        if (type === "add_ships") {
-            addShips(wss, data);
-            return;
-        }
-
-        if (type === "attack") {
-
+        switch (type) {
+            case "reg":
+                register(ws, data);
+                updateRoom(wss);
+                updateWinners(wss);
+                break;
+            case "create_room":
+                createRoom(ws);
+                updateRoom(wss);
+                break;
+            case "add_user_to_room":
+                addUserToRoom(wss, ws, data);
+                break;
+            case "add_ships":
+                addShips(wss, data);
+                break;
+            case "attack":
+                break;
+            case "randomAttack":
+                break;
         }
     });
 
