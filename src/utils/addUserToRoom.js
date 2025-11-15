@@ -3,8 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { updateRoom } from './updateRoom.js';
 import { send } from './send.js';
 
-export const addUserToRoom = (wss, ws, roomId) => {
-    const room = rooms.get(roomId);
+export const addUserToRoom = (wss, ws, data) => {
+    const { indexRoom } = JSON.parse(data);
+    const room = rooms.get(indexRoom);
     const username = connections.get(ws);
 
     if (!username || !room) return;
@@ -25,7 +26,7 @@ export const addUserToRoom = (wss, ws, roomId) => {
             }
         );
 
-        rooms.delete(roomId);
+        rooms.delete(indexRoom);
         updateRoom(wss);
 
         wss.clients.forEach(ws => {

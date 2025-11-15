@@ -4,6 +4,7 @@ import { updateRoom } from '../utils/updateRoom.js';
 import { updateWinners } from '../utils/updateWinners.js';
 import { createRoom } from '../utils/createRoom.js';
 import { addUserToRoom } from '../utils/addUserToRoom.js';
+import { addShips } from '../utils/addShips.js';
 import { connections } from '../db/db.js';
 
 const wss = new WebSocketServer({ port: 3000 });
@@ -13,8 +14,7 @@ wss.on('connection', (ws) => {
         const { type, data } = JSON.parse(message);
 
         if (type === "reg") {
-            const { name, password } = JSON.parse(data);
-            register(ws, name, password);
+            register(ws, data);
             updateRoom(wss);
             updateWinners(wss);
             return;
@@ -27,12 +27,16 @@ wss.on('connection', (ws) => {
         }
 
         if (type === "add_user_to_room") {
-            const { indexRoom } = JSON.parse(data);
-            addUserToRoom(wss, ws, indexRoom);
+            addUserToRoom(wss, ws, data);
             return;
         }
 
         if (type === "add_ships") {
+            addShips(wss, data);
+            return;
+        }
+
+        if (type === "attack") {
 
         }
     });

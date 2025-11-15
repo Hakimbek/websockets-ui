@@ -2,7 +2,9 @@ import { v4 as uuidv4 } from "uuid";
 import { players, connections } from '../db/db.js';
 import { send } from './send.js';
 
-export const register = (ws, name, password) => {
+export const register = (ws, data) => {
+    const { name, password } = JSON.parse(data);
+
     if (!players.has(name)) {
         players.set(name, {
             id: uuidv4(),
